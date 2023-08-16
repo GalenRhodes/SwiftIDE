@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SwiftIDE Main" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.projectgalen.swift.ide.Main" />
+    <module name="SwiftIDE" />
+    <method v="2">
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
+    </method>
+  </configuration>
+</component>

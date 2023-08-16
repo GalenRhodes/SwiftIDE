@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.projectgalen.swift.ide</groupId>
+    <artifactId>SwiftIDE</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <github.global.server>github</github.global.server>
+        <github.owner>GalenRhodes</github.owner>
+        <github.mvn.repo>maven-repo</github.mvn.repo>
+    </properties>
+
+    <name>SwiftIDE</name>
+    <description>A cross-platform IDE for Swift Development</description>
+    <url>https://github.com/${github.owner}/${project.artifactId}</url>
+
+    <developers>
+        <developer>
+            <id>g.rhodes</id>
+            <name>Galen Rhodes</name>
+            <email>galenrhodes@me.com</email>
+        </developer>
+    </developers>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>GalenRhodes</id>
+            <url>https://github.com/${github.owner}/${github.mvn.repo}/raw/main/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <scm>
+        <url>https://github.com/${github.owner}/${project.artifactId}</url>
+        <developerConnection>scm:git:git@github.com:${github.owner}/${project.artifactId}.git</developerConnection>
+        <connection>scm:git:https://github.com/${github.owner}/${project.artifactId}.git</connection>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.projectgalen.lib</groupId>
+            <artifactId>PGUtils</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.projectgalen.lib</groupId>
+            <artifactId>PGCrypto</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <packaging>jar</packaging>
+
+    <build>
+        <defaultGoal>package</defaultGoal>
+    </build>
+
+</project>
