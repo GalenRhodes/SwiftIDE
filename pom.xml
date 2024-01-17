@@ -9,17 +9,38 @@
     <version>1.0.0</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <app.base.path>com/projectgalen/swift/ide</app.base.path>
+        <app.base.package>com.projectgalen.swift.ide</app.base.package>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <intellij.version>232.8660.185</intellij.version>
+        <intellij.annotations.version>24.0.1</intellij.annotations.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <github.global.server>github</github.global.server>
         <github.owner>GalenRhodes</github.owner>
         <github.mvn.repo>maven-repo</github.mvn.repo>
+        <project.build.module.src.dir>${project.basedir}/src/main</project.build.module.src.dir>
+        <project.build.resources.dir>${project.build.module.src.dir}/resources</project.build.resources.dir>
+        <project.build.metainf.dir>${project.build.resources.dir}/META-INF</project.build.metainf.dir>
+        <project.build.manifest.path>${project.build.metainf.dir}/MANIFEST.MF</project.build.manifest.path>
+        <project.build.jarclasses.dir>${project.build.directory}/jars-classes</project.build.jarclasses.dir>
+        <props2xml.jar.path>${project.basedir}/utils/PropertiesToXML-1.0.0.jar</props2xml.jar.path>
+        <intellij.artifactid.excludes.list>
+            <!-- These are only needed during the javac2 compilation process and not for runtime. -->
+            asm-all,
+            forms,
+            java-compiler-ant-tasks,
+            java-compiler-instrumentation-util,
+            java-compiler-instrumentation-util-java8,
+            java-gui-forms-compiler,
+            jaxen,
+            util-jdom
+        </intellij.artifactid.excludes.list>
     </properties>
 
-    <name>SwiftIDE</name>
-    <description>A cross-platform IDE for Swift Development</description>
+    <name>MySQL Designer</name>
+    <description>${project.name}</description>
     <url>https://github.com/${github.owner}/${project.artifactId}</url>
 
     <developers>
@@ -32,12 +53,20 @@
 
     <repositories>
         <repository>
+            <id>${github.owner}</id>
+            <url>https://github.com/${github.owner}/${github.mvn.repo}/raw/main/</url>
+        </repository>
+        <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
         <repository>
-            <id>GalenRhodes</id>
-            <url>https://github.com/${github.owner}/${github.mvn.repo}/raw/main/</url>
+            <id>jetbrains.releases</id>
+            <url>https://www.jetbrains.com/intellij-repository/releases</url>
+        </repository>
+        <repository>
+            <id>jetbrains.3rdparty</id>
+            <url>https://cache-redirector.jetbrains.com/intellij-dependencies</url>
         </repository>
     </repositories>
 
@@ -48,6 +77,14 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-artifact</url>
+        </repository>
+    </distributionManagement>
+
     <scm>
         <url>https://github.com/${github.owner}/${project.artifactId}</url>
         <developerConnection>scm:git:git@github.com:${github.owner}/${project.artifactId}.git</developerConnection>
@@ -57,20 +94,38 @@
     <dependencies>
         <dependency>
             <groupId>com.projectgalen.lib</groupId>
-            <artifactId>PGUtils</artifactId>
-            <version>1.0.0</version>
+            <artifactId>PGUI</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.projectgalen.lib</groupId>
-            <artifactId>PGCrypto</artifactId>
-            <version>1.0.0</version>
+            <artifactId>PGUtils</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.4.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>24.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jetbrains.intellij.java</groupId>
+            <artifactId>java-gui-forms-rt</artifactId>
+            <version>233.11799.286</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jetbrains.intellij.java</groupId>
+            <artifactId>java-compiler-ant-tasks</artifactId>
+            <version>233.11799.286</version>
         </dependency>
     </dependencies>
 
@@ -78,6 +133,88 @@
 
     <build>
         <defaultGoal>package</defaultGoal>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>1</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <target>
+                                <taskdef name="javac2" classpathref="maven.runtime.classpath" classname="com.intellij.ant.Javac2"/>
+                                <javac2 srcdir="${project.build.module.src.dir}/java" destdir="${project.build.outputDirectory}" classpathref="maven.compile.classpath" includeantruntime="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.manifest.path}</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>**/MANIFEST.MF,META-INF/maven/</excludes>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <excludeArtifactIds>${intellij.artifactid.excludes.list}</excludeArtifactIds>
+                            <overWriteIfNewer>false</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
