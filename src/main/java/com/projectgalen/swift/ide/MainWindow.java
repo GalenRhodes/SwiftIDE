@@ -22,7 +22,7 @@ package com.projectgalen.swift.ide;
 // IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 // ===========================================================================
 
-import com.projectgalen.lib.utils.Null;
+import com.projectgalen.lib.utils.helpers.Null;
 import com.projectgalen.swift.ide.utils.U2;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,17 +51,23 @@ public class MainWindow extends JFrame {
 
         addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent e) { handleResizeOrMove(e, "resize"); }
+            public void componentResized(ComponentEvent e) {
+                handleResizeOrMove(e, "resize");
+            }
 
             @Override
-            public void componentMoved(ComponentEvent e) { handleResizeOrMove(e, "moved"); }
+            public void componentMoved(ComponentEvent e) {
+                handleResizeOrMove(e, "moved");
+            }
         });
 
         addWindowStateListener(e -> props.setProperty("main.window.state", Objects.toString(getExtendedState())));
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) { saveWindowPropertiesOnExit(); }
+            public void windowClosing(WindowEvent e) {
+                saveWindowPropertiesOnExit();
+            }
         });
     }
 
@@ -72,7 +78,7 @@ public class MainWindow extends JFrame {
     protected void handleResizeOrMove(ComponentEvent componentEvent, @NotNull String timerName) {
         Timer timer = uiTimers.get(timerName);
 
-        if(timer == null) {
+        if (timer == null) {
             timer = new Timer(250, e -> {
                 Null.doIfNotNull(uiTimers.remove(timerName), Timer::stop);
                 props.setProperty("main.window.pos", U2.getComponentBoundsString(componentEvent.getComponent()));

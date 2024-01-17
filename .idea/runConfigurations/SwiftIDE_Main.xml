@@ -2,6 +2,7 @@
   <configuration default="false" name="SwiftIDE Main" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.projectgalen.swift.ide.Main" />
     <module name="SwiftIDE" />
+    <option name="PROGRAM_PARAMETERS" value="-Dsun.java2d.metal=true -Dsun.java2d.opengl=false -Dfile.encoding=&quot;UTF-8&quot; -Duser.timezone=&quot;US/Eastern&quot; -Duser.country=&quot;US&quot; -Duser.language=&quot;en&quot;" />
     <method v="2">
       <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
     </method>

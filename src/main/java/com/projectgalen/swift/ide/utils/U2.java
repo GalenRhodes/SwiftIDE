@@ -22,7 +22,7 @@ package com.projectgalen.swift.ide.utils;
 // IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 // ===========================================================================
 
-import com.projectgalen.lib.utils.regex.Regex;
+import com.projectgalen.lib.utils.text.regex.Regex;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -30,7 +30,8 @@ import java.awt.*;
 import java.util.regex.Matcher;
 
 public final class U2 {
-    private U2() { }
+    private U2() {
+    }
 
     @NotNull
     public static String getComponentBoundsString(@NotNull Component c) {
@@ -39,12 +40,11 @@ public final class U2 {
 
     public static void setComponentBounds(@NotNull Component c, @NotNull String boundsStr, int defaultWidth, int defaultHeight) {
         Matcher m = Regex.getMatcher("\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)", boundsStr);
-        if(m.matches()) {
+        if (m.matches()) {
             c.setBounds(new Rectangle(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4))));
-        }
-        else {
+        } else {
             c.setSize(defaultWidth, defaultHeight);
-            if(c instanceof JFrame) ((JFrame)c).setLocationRelativeTo(null);
+            if (c instanceof JFrame) ((JFrame) c).setLocationRelativeTo(null);
         }
     }
 }
